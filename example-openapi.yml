@@ -32,7 +32,6 @@ components:
         default: en-US
         enum:
         - en-US
-        - fr-CA
         type: string
     properties:
       description: The properties that should be included for each feature. The parameter
@@ -123,9 +122,9 @@ components:
       type: object
 info:
   contact:
-    email: you@example.org
-    name: Organization Name
-    url: https://pygeoapi.io
+    email: shane.mill@noaa.gov
+    name: NOAA - National Weather Service
+    url: https://vlab.noaa.gov/web/mdl/data-api
   description: pygeoapi provides an API to geospatial data
   license:
     name: CC-BY 4.0 license
@@ -233,12 +232,10 @@ paths:
       summary: Processes
       tags:
       - server
-  /processes/hello-world:
+  /processes/computation-subtraction:
     get:
-      description: An example process that takes a name as input, and echoes it back
-        as output. Intended to demonstrate a simple process with a single literal
-        input.
-      operationId: describeHello-worldProcess
+      description: Computation process that subtracts two inputs
+      operationId: describeComputation-subtractionProcess
       parameters:
       - $ref: '#/components/parameters/f'
       responses:
@@ -248,20 +245,18 @@ paths:
           $ref: '#/components/responses/default'
       summary: Get process metadata
       tags:
-      - hello-world
-  /processes/hello-world/execution:
+      - computation-subtraction
+  /processes/computation-subtraction/execution:
     post:
-      description: An example process that takes a name as input, and echoes it back
-        as output. Intended to demonstrate a simple process with a single literal
-        input.
-      operationId: executeHello-worldJob
+      description: Computation process that subtracts two inputs
+      operationId: executeComputation-subtractionJob
       requestBody:
         content:
           application/json:
             example:
               inputs:
-                message: An optional message.
-                name: World
+                input1: url1
+                input2: url2
             schema:
               $ref: https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/core/openapi/schemas/execute.yaml
         description: Mandatory execute request JSON
@@ -277,15 +272,13 @@ paths:
           $ref: https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/core/openapi/responses/ServerError.yaml
         default:
           $ref: '#/components/responses/default'
-      summary: Process Hello World execution
+      summary: Process computation-subtraction execution
       tags:
-      - hello-world
-  /processes/hello-world/jobs:
+      - computation-subtraction
+  /processes/computation-subtraction/jobs:
     get:
-      description: An example process that takes a name as input, and echoes it back
-        as output. Intended to demonstrate a simple process with a single literal
-        input.
-      operationId: getHello-worldJobs
+      description: Computation process that subtracts two inputs
+      operationId: getComputation-subtractionJobs
       responses:
         '200':
           $ref: '#/components/responses/200'
@@ -295,7 +288,7 @@ paths:
           $ref: '#/components/responses/default'
       summary: Retrieve job list for process
       tags:
-      - hello-world
+      - computation-subtraction
 servers:
 - description: pygeoapi provides an API to geospatial data
   url: http://localhost:5400
@@ -307,7 +300,6 @@ tags:
   name: server
 - description: SpatioTemporal Asset Catalog
   name: stac
-- description: An example process that takes a name as input, and echoes it back as
-    output. Intended to demonstrate a simple process with a single literal input.
-  name: hello-world
+- description: Computation process that subtracts two inputs
+  name: computation-subtraction
 
