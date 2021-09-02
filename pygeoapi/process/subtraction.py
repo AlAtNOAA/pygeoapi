@@ -28,7 +28,7 @@
 # =================================================================
 
 import logging
-
+import numpy as np
 from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 
 
@@ -55,7 +55,7 @@ PROCESS_METADATA = {
     'inputs': {
         'input1': {
             'title': 'Input1',
-            'description': 'first edr-api request in subtraction',
+            'description': 'first entry in subtraction',
             'schema': {
                 'type': 'string'
             },
@@ -66,7 +66,7 @@ PROCESS_METADATA = {
         },
         'input1': {
             'title': 'Input2',
-            'description': 'second edr-api request in subtraction',
+            'description': 'second entry request in subtraction',
             'schema': {
                 'type': 'string'
             },
@@ -88,8 +88,8 @@ PROCESS_METADATA = {
     },
     'example': {
         'inputs': {
-            'input1': 'url1',
-            'input2': 'url2',
+            'input1': 'float, integer, array, or list',
+            'input2': 'float, integer, array, or list',
         }
     }
 }
@@ -111,15 +111,19 @@ class ComputationSubtractionProcessor(BaseProcessor):
     def execute(self, data):
 
         mimetype = 'application/json'
-        name = data.get('name', None)
+        input1 = data.get('input1', None)
+        input2 = data.get('input2', None)
+        if input1 is None or input2 is None:
+            raise ProcessorExecuteError('Cannot process with the given inputs. Check that the inputs are of type integer, float, or list')
 
-        if name is None:
-            raise ProcessorExecuteError('Cannot process without a name')
-
-        value = 'Hello {}! {}'.format(name, data.get('message', '')).strip()
-
+        if isinstance(input1,list) and isinstance(input2,list):
+           input1_np=np.array(input1)
+           input2_np=np.array(input2)
+           value=np.subtract(input1_np,input2_np).tolist()
+        else:
+           value=input1-input2
         outputs = {
-            'id': 'echo',
+            'id': 'result',
             'value': value
         }
 

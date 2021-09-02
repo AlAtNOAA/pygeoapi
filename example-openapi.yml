@@ -255,8 +255,8 @@ paths:
           application/json:
             example:
               inputs:
-                input1: url1
-                input2: url2
+                input1: float, integer, array, or list
+                input2: float, integer, array, or list
             schema:
               $ref: https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/core/openapi/schemas/execute.yaml
         description: Mandatory execute request JSON
