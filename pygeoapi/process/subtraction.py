@@ -30,7 +30,7 @@
 import logging
 import numpy as np
 from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
-
+import requests
 
 LOGGER = logging.getLogger(__name__)
 
@@ -52,30 +52,6 @@ PROCESS_METADATA = {
         'href': 'https://example.org/process',
         'hreflang': 'en-US'
     }],
-    'inputs': {
-        'input1': {
-            'title': 'Input1',
-            'description': 'first entry in subtraction',
-            'schema': {
-                'type': 'string'
-            },
-            'minOccurs': 1,
-            'maxOccurs': 1,
-            'metadata': None,  # TODO how to use?
-            'keywords': ['input1']
-        },
-        'input1': {
-            'title': 'Input2',
-            'description': 'second entry request in subtraction',
-            'schema': {
-                'type': 'string'
-            },
-            'minOccurs': 1,
-            'maxOccurs': 1,
-            'metadata': None,  # TODO how to use?
-            'keywords': ['input2']
-        },
-    },
     'outputs': {
         'result': {
             'title': 'Result',
@@ -88,8 +64,11 @@ PROCESS_METADATA = {
     },
     'example': {
         'inputs': {
-            'input1': 'float, integer, array, or list',
-            'input2': 'float, integer, array, or list',
+           'instance1': '2021-09-02T00:00:00',
+           'instance2': '2021-09-02T06:00:00',
+           'coords': 'POINT(-77.725999 36.047816)',
+           'parameter-name': 'TMP_P0_L1_GLL0',
+           'datetime': ''
         }
     }
 }
@@ -111,22 +90,26 @@ class ComputationSubtractionProcessor(BaseProcessor):
     def execute(self, data):
 
         mimetype = 'application/json'
-        input1 = data.get('input1', None)
-        input2 = data.get('input2', None)
-        if input1 is None or input2 is None:
-            raise ProcessorExecuteError('Cannot process with the given inputs. Check that the inputs are of type integer, float, or list')
+        coords = data.get('coords', None)
+        parameter_name = data.get('parameter-name', None)
+        datetime = data.get('datetime', None)
+        instance1= data.get('instance1', None)
+        instance2= data.get('instance2', None)
 
-        if isinstance(input1,list) and isinstance(input2,list):
-           input1_np=np.array(input1)
-           input2_np=np.array(input2)
-           value=np.subtract(input1_np,input2_np).tolist()
-        else:
-           value=input1-input2
-        outputs = {
-            'id': 'result',
-            'value': value
-        }
+        request_url_1='http://data-api-c.mdl.nws.noaa.gov/OGC-EDR-API/collections/automated_gfs_100_forecast_time0_lat_0_lon_0_ground_or_water_surface/instances/'+instance1+'/position?coords='+coords+'&parameter-name='+parameter_name+'&datetime='+datetime+'&f=CoverageJSON'
 
+        request_url_2='http://data-api-c.mdl.nws.noaa.gov/OGC-EDR-API/collections/automated_gfs_100_forecast_time0_lat_0_lon_0_ground_or_water_surface/instances/'+instance2+'/position?coords='+coords+'&parameter-name='+parameter_name+'&datetime='+datetime+'&f=CoverageJSON'
+        rq1_json=requests.get(request_url_1).json()
+        rq2_json=requests.get(request_url_2).json()
+        
+        rq1_time_array=rq1_json['domain']['axes']['t']['values']
+        rq2_time_array=rq2_json['domain']['axes']['t']['values']
+        rq1_data_array=rq1_json['ranges'][parameter_name]['values']
+        rq2_data_array=rq2_json['ranges'][parameter_name]['values']
+        
+        outputs=rq2_json
+        outputs['ranges'][parameter_name]['values']=(np.array(rq1_data_array)-np.array(rq2_data_array)).tolist()
+        #outputs eventually will be the coveragejson response
         return mimetype, outputs
 
     def __repr__(self):

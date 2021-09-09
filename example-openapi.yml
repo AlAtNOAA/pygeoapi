@@ -255,8 +255,11 @@ paths:
           application/json:
             example:
               inputs:
-                input1: float, integer, array, or list
-                input2: float, integer, array, or list
+                coords: POINT(-77.725999 36.047816)
+                datetime: ''
+                instance1: '2021-09-02T00:00:00'
+                instance2: '2021-09-02T06:00:00'
+                parameter-name: TMP_P0_L1_GLL0
             schema:
               $ref: https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/core/openapi/schemas/execute.yaml
         description: Mandatory execute request JSON

@@ -27,3 +27,5 @@ pyasn1
 # Read the docs
 sphinx==3.0.1
 sphinx_rtd_theme
+
+requests
