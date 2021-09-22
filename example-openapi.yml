@@ -255,11 +255,15 @@ paths:
           application/json:
             example:
               inputs:
-                coords: POINT(-77.725999 36.047816)
+                collection_name: automated_gfs_100_forecast_time0_lat_0_lon_0_ground_or_water_surface
+                coords: POLYGON((-134.315336 27.319254,-134.315336 55.952663,-66.484018
+                  55.952663,-66.484018 27.319254,-134.315336 27.319254))
                 datetime: ''
+                f: CoverageJSON
                 instance1: '2021-09-02T00:00:00'
                 instance2: '2021-09-02T06:00:00'
                 parameter-name: TMP_P0_L1_GLL0
+                sampling_geometry: cube
             schema:
               $ref: https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/core/openapi/schemas/execute.yaml
         description: Mandatory execute request JSON

@@ -29,3 +29,8 @@ sphinx==3.0.1
 sphinx_rtd_theme
 
 requests
+
+#additional output format support
+xarray
+h5netcdf
+scipy

@@ -79,7 +79,6 @@ class DummyManager(BaseManager):
         if is_async:
             LOGGER.debug('Dummy manager does not support asynchronous')
             LOGGER.debug('Forcing synchronous execution')
-
         try:
             jfmt, outputs = p.execute(data_dict)
             current_status = JobStatus.successful

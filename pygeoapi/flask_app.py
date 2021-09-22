@@ -34,7 +34,7 @@ import os
 
 import click
 
-from flask import Flask, Blueprint, make_response, request, send_from_directory
+from flask import Flask, Blueprint, make_response, request, send_from_directory, send_file
 
 from pygeoapi.api import API
 from pygeoapi.util import get_mimetype, yaml_load
@@ -108,10 +108,13 @@ def get_response(result: tuple):
 
     headers, status, content = result
     response = make_response(content, status)
-
     if headers:
         response.headers = headers
-    return response
+    if 'netcdf' in headers['Content-Type']:
+       file_name=content.replace('"','')
+       return send_file(file_name)
+    else:
+       return response
 
 
 @BLUEPRINT.route('/')

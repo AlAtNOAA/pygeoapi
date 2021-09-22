@@ -37,6 +37,7 @@ import asyncio
 from collections import OrderedDict
 from copy import deepcopy
 from datetime import datetime, timezone
+import flask
 from functools import partial
 import json
 import logging
@@ -2696,7 +2697,6 @@ class API:
             http_status = 201
         else:
             http_status = 200
-
         return headers, http_status, to_json(response, self.pretty_print)
 
     @pre_process
