@@ -57,14 +57,13 @@ PLUGINS = {
         'CSV': 'pygeoapi.formatter.csv_.CSVFormatter'
     },
     'process': {
-        'ComputationSubtraction': 'pygeoapi.process.subtraction.ComputationSubtractionProcessor'
+        'ComputationSubtraction': 'pygeoapi.process.computation.subtraction.ComputationSubtractionProcessor'
     },
     'process_manager': {
         'Dummy': 'pygeoapi.process.manager.dummy.DummyManager',
         'TinyDB': 'pygeoapi.process.manager.tinydb_.TinyDBManager'
     }
 }
-
 
 def load_plugin(plugin_type, plugin_def):
     """
@@ -75,7 +74,6 @@ def load_plugin(plugin_type, plugin_def):
 
     :returns: plugin object
     """
-
     name = plugin_def['name']
 
     if plugin_type not in PLUGINS.keys():

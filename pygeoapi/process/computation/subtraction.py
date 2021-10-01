@@ -31,6 +31,7 @@ import io
 import logging
 import numpy as np
 from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
+from pygeoapi.process.output_formats import get_covjson, get_netcdf 
 import requests
 import xarray as xr
 import flask
@@ -107,55 +108,13 @@ class ComputationSubtractionProcessor(BaseProcessor):
         request_url_1='http://data-api-c.mdl.nws.noaa.gov/OGC-EDR-API/collections/'+collection_name+'/instances/'+instance1+'/'+sampling_geometry+'?coords='+coords+'&parameter-name='+parameter_name+'&datetime='+datetime+'&f='+f
 
         request_url_2='http://data-api-c.mdl.nws.noaa.gov/OGC-EDR-API/collections/'+collection_name+'/instances/'+instance2+'/'+sampling_geometry+'?coords='+coords+'&parameter-name='+parameter_name+'&datetime='+datetime+'&f='+f
+        
         if f=='CoverageJSON':
-           mimetype, outputs=self.get_coveragejson_data(request_url_1,request_url_2,parameter_name)
+           mimetype, outputs=get_covjson.computation_subtraction_covjson(request_url_1,request_url_2,parameter_name)
            return mimetype, outputs
         if f=='NetCDF':
-           mimetype, output_loc=self.get_netcdf_data(request_url_1,request_url_2,parameter_name)
+           mimetype, output_loc=get_netcdf.computation_subtraction_netcdf(request_url_1,request_url_2,parameter_name)
            return mimetype, output_loc                    
-
-
-    def get_coveragejson_data(self,request_url_1,request_url_2,parameter_name):
-        mimetype = 'application/json'
-        rq1_json=requests.get(request_url_1).json()
-        rq2_json=requests.get(request_url_2).json()
-
-        rq1_time_array=rq1_json['domain']['axes']['t']['values']
-        rq2_time_array=rq2_json['domain']['axes']['t']['values']
-        rq1_data_array=rq1_json['ranges'][parameter_name]['values']
-        rq2_data_array=rq2_json['ranges'][parameter_name]['values']
-
-        outputs=rq2_json
-        outputs['ranges'][parameter_name]['values']=(np.array(rq1_data_array)-np.array(rq2_data_array)).tolist()
-        return mimetype, outputs
-
-
-    def get_netcdf_data(self,request_url_1,request_url_2,parameter_name):
-        mimetype = 'application/x-netcdf4'
-        rq1_bytes=requests.get(request_url_1).content
-        rq2_bytes=requests.get(request_url_2).content
-        rq1_ds=xr.open_dataset(io.BytesIO(rq1_bytes))
-        valid_time_rq1=rq1_ds.valid_time.values
-        rq1_ds=rq1_ds.drop('step')
-        rq1_ds=rq1_ds.drop('valid_time')
-        rq1_ds=rq1_ds.assign_coords({'step':valid_time_rq1.astype(str)})
-        rq1_ds=rq1_ds.rename({'step':'valid_time'})
-        rq2_ds=xr.open_dataset(io.BytesIO(rq2_bytes))
-        valid_time_rq2=rq2_ds.valid_time.values
-        rq2_ds=rq2_ds.drop('step')
-        rq2_ds=rq2_ds.drop('valid_time')
-        rq2_ds=rq2_ds.assign_coords({'step':valid_time_rq2.astype(str)})
-        rq2_ds=rq2_ds.rename({'step':'valid_time'})
-        valid_time_intersect=np.intersect1d(valid_time_rq1,valid_time_rq2)
-        valid_time_min=str(valid_time_intersect.min())
-        valid_time_max=str(valid_time_intersect.max())
-        rq1_ds=rq1_ds.sel({'valid_time':slice(valid_time_min,valid_time_max)})
-        rq2_ds=rq2_ds.sel({'valid_time':slice(valid_time_min,valid_time_max)})
-        output=rq1_ds-rq2_ds
-        outputs='/tmp/output.netcdf'
-        output.to_netcdf(outputs)
-        return mimetype, outputs
-
 
 
     def __repr__(self):
