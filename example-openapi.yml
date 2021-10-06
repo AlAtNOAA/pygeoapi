@@ -389,7 +389,7 @@ paths:
           $ref: http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
         '500':
           $ref: http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
-      summary: Get NOAA/NWS/MDL EDR Prototype Metadata metadata
+      summary: Get NOAA-NWS-MDL EDR Prototype Metadata metadata
       tags:
       - noaa-nws-mdl-metadata
   /collections/noaa-nws-mdl-metadata/items:
@@ -500,7 +500,7 @@ paths:
           $ref: http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
         '500':
           $ref: http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
-      summary: Get NOAA/NWS/MDL EDR Prototype Metadata items
+      summary: Get NOAA-NWS-MDL EDR Prototype Metadata items
       tags:
       - noaa-nws-mdl-metadata
   /collections/noaa-nws-mdl-metadata/items/{featureId}:
@@ -520,7 +520,7 @@ paths:
           $ref: http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
         '500':
           $ref: http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
-      summary: Get NOAA/NWS/MDL EDR Prototype Metadata item by id
+      summary: Get NOAA-NWS-MDL EDR Prototype Metadata item by id
       tags:
       - noaa-nws-mdl-metadata
   /collections/noaa-nws-mdl-metadata/queryables:
@@ -539,7 +539,7 @@ paths:
           $ref: http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
         '500':
           $ref: http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
-      summary: Get NOAA/NWS/MDL EDR Prototype Metadata queryables
+      summary: Get NOAA-NWS-MDL EDR Prototype Metadata queryables
       tags:
       - noaa-nws-mdl-metadata
   /conformance:

@@ -132,13 +132,16 @@ resources:
     noaa-nws-mdl-metadata:
         type: collection
         title:
-            en: NOAA/NWS/MDL EDR Prototype Metadata
+            en: NOAA-NWS-MDL EDR Prototype Metadata
         description:
             en: Begin prototyping EDR metadata for OGC-API Records
         keywords:
             en:
+                - noaa
                 - nws
-                - open data
+                - mdl
+                - ogc
+                - edr
         links:
             - type: text/html
               rel: canonical
