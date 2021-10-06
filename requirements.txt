@@ -12,3 +12,8 @@ tinydb
 unicodecsv
 future-annotations
 pydantic
+netCDF4
+scipy
+xarray
+zarr
+h5netcdf

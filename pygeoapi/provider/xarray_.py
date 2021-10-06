@@ -61,6 +61,7 @@ class XarrayProvider(BaseProvider):
                 open_func = xarray.open_zarr
             else:
                 open_func = xarray.open_dataset
+                LOGGER.debug(self.data)
             self._data = open_func(self.data)
             self._data = _convert_float32_to_float64(self._data)
             self._coverage_properties = self._get_coverage_properties()
