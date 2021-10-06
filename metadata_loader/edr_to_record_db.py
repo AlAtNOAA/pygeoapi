@@ -11,10 +11,11 @@ def edr_meta_to_oar(edr_api_url):
    #variables to fulfill
    edr_rq=requests.get(edr_api_url)
    edr_meta_dict=edr_rq.json()
+   edr_rq.close()
    identifier=edr_meta_dict['id']
    first_param_iter=next(iter(edr_meta_dict['parameters']))
    bbox=edr_meta_dict['parameters'][first_param_iter]['extent']['horizontal']['geographic']
-   bbox_crs=edr_meta_dict['crs']
+   bbox_crs=edr_meta_dict['crs'][0]['id']
    minx=bbox.split(',')[0].replace('BBOX[','')
    miny=bbox.split(',')[1]
    maxx=bbox.split(',')[2]
@@ -68,8 +69,7 @@ def edr_meta_to_oar(edr_api_url):
             '_metadata-anytext': ''
         }
     }
-
-   anytext = ' '.join(OAP_REC_JSON)
+   anytext=' '.join(str(x) for x in OAP_REC_JSON.values())
    OAP_REC_JSON['_metadata-anytext']=anytext
    return OAP_REC_JSON
 
