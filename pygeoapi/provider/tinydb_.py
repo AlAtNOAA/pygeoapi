@@ -29,6 +29,7 @@
 
 import logging
 import os
+import re  # noqa
 
 from tinydb import TinyDB, Query
 
@@ -156,7 +157,7 @@ class TinyDBCatalogueProvider(BaseProvider):
 
         if q is not None:
             for t in q.split():
-                QUERY.append("(Q.properties['_metadata-anytext'].search('{}'))".format(t))  # noqa
+                QUERY.append("(Q.properties['_metadata-anytext'].search('{}', flags=re.IGNORECASE))".format(t))  # noqa
 
         QUERY_STRING = '&'.join(QUERY)
         LOGGER.debug('QUERY_STRING: {}'.format(QUERY_STRING))
@@ -215,7 +216,7 @@ class TinyDBCatalogueProvider(BaseProvider):
 
         LOGGER.debug('Fetching identifier {}'.format(identifier))
 
-        record = self.db.get(Query().properties[self.id_field] == identifier)
+        record = self.db.get(Query().id == identifier)
 
         if record is None:
             raise ProviderItemNotFoundError('record does not exist')
