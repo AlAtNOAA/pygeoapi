@@ -50,6 +50,8 @@ from babel.support import Translations
 from jinja2.exceptions import TemplateNotFound
 import yaml
 
+import numpy as np
+
 from pygeoapi import __version__
 from pygeoapi import l10n
 from pygeoapi.provider.base import ProviderTypeError
@@ -283,6 +285,8 @@ def json_serial(obj):
         return float(obj)
     elif isinstance(obj, l10n.Locale):
         return l10n.locale2str(obj)
+    elif isinstance(obj, np.ndarray):
+        return str(obj.tolist())
 
     msg = '{} type {} not serializable'.format(obj, type(obj))
     LOGGER.error(msg)
