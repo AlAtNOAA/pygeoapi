@@ -31,7 +31,7 @@ import os
 import logging
 import tempfile
 import zipfile
-
+import json
 import xarray
 import numpy as np
 
@@ -163,6 +163,7 @@ class XarrayProviderAna(BaseProvider):
                 desc = parameter['description']
                 units = parameter['unit_label']
 
+                var.attrs['valid_range'] = var.attrs['valid_range'].tolist()
                 rangetype['field'].append({
                     'id': name,
                     'type': 'QuantityType',
@@ -399,6 +400,7 @@ class XarrayProviderAna(BaseProvider):
 
                 data = data.fillna(None)
                 cj['ranges'][key]['values'] = data[key].values.flatten().tolist()  # noqa
+            LOGGER.debug(f'gen_covjson -> cj: {cj}')
         except IndexError as err:
             LOGGER.warning(err)
             raise ProviderQueryError('Invalid query parameter')

@@ -285,8 +285,6 @@ def json_serial(obj):
         return float(obj)
     elif isinstance(obj, l10n.Locale):
         return l10n.locale2str(obj)
-    elif isinstance(obj, np.ndarray):
-        return str(obj.tolist())
 
     msg = '{} type {} not serializable'.format(obj, type(obj))
     LOGGER.error(msg)
