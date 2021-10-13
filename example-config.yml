@@ -103,14 +103,14 @@ resources:
         extents:
             spatial:
                 bbox: [-130,20,-60,55]
-                old_bbox: "[-2303000, -1918000, 2303000, 1918000]"
+                old_bbox: [-2303000, -1918000, 2303000, 1918000]
                 crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
         providers:
             - type: edr
               name: xarray-ana-edr
-              data: /home/shane.mill/test_data/nwm.t00z.analysis_assim.land.tm00.conus.nc
-              x_field: x
+              data: /data/nwm.t00z.analysis_assim.land.tm00.conus.nc
               y_field: y
+              x_field: x
               time_field: reference_time
               format:
                   name: netcdf
